@@ -2257,3 +2257,243 @@ input[type="month"]{
     font-size:9.5px !important;
   }
 }
+
+
+/* =========================================================
+   v10.14 · true native picker containment + exact metric center
+   ========================================================= */
+
+/*
+  iOS/ZEP date/time/month inputs are removed from normal layout flow.
+  The visible control is our own block. The real native picker sits
+  absolutely over it and can no longer change the card width.
+*/
+.native-picker-shell{
+  position:relative;
+  display:block;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  height:52px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#fcfdff;
+  box-sizing:border-box;
+  overflow:hidden;
+}
+
+.native-picker-shell:focus-within{
+  border-color:#aab4c1;
+  box-shadow:0 0 0 4px rgba(81,96,116,.10);
+}
+
+.native-picker-display{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 42px 0 14px;
+  color:var(--ink);
+  font-size:16px;
+  line-height:1;
+  white-space:nowrap;
+  pointer-events:none;
+  box-sizing:border-box;
+}
+
+.native-picker-display.placeholder{
+  color:#a5adb7;
+}
+
+/* Small visual cue, independent of the actual native input */
+.native-picker-shell::after{
+  content:"";
+  position:absolute;
+  right:15px;
+  top:50%;
+  z-index:1;
+  width:7px;
+  height:7px;
+  border-right:2px solid #687585;
+  border-bottom:2px solid #687585;
+  transform:translateY(-65%) rotate(45deg);
+  pointer-events:none;
+  opacity:.8;
+}
+
+.native-picker-input{
+  position:absolute !important;
+  inset:0 !important;
+  z-index:2;
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  opacity:0 !important;
+  cursor:pointer;
+  -webkit-appearance:auto;
+  appearance:auto;
+}
+
+/* No clipping hacks on the admin cards themselves */
+.admin-attendance-card,
+.admin-subsection,
+.admin-reset-card{
+  overflow:visible !important;
+}
+
+/* Ensure every layout ancestor can actually shrink */
+.admin-edit-grid,
+.admin-edit-grid > *,
+.two,
+.two > *,
+.reset-layout,
+.reset-layout > *,
+.reset-controls,
+.reset-controls > *,
+.field,
+.reset-month-field{
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+/* Attendance note: keep it comfortably on one line */
+.attendance-card .footer-note{
+  white-space:nowrap !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  font-size:13px !important;
+  padding:10px 13px !important;
+  line-height:1.35 !important;
+}
+
+/* Metric cards: compact, and the content stack is geometrically centered */
+.overall-member-metric{
+  position:relative;
+  display:grid !important;
+  place-items:center !important;
+  min-height:54px !important;
+  padding:5px 5px !important;
+  text-align:center !important;
+}
+
+.metric-stack{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  width:100%;
+  margin:0;
+  padding:0;
+  transform:translateY(2px);
+}
+
+.metric-stack b{
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+  text-align:center !important;
+}
+
+.metric-stack small{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  color:#838d9a !important;
+  font-size:11px !important;
+  line-height:1.15 !important;
+  text-align:center !important;
+  word-break:keep-all;
+}
+
+/* Neutralize previous direct child centering rules */
+.overall-member-metric > b,
+.overall-member-metric > small{
+  margin:0 !important;
+}
+
+@media(max-width:640px){
+  .admin-edit-grid,
+  .two,
+  .reset-layout,
+  .reset-controls{
+    grid-template-columns:minmax(0,1fr) !important;
+    width:100% !important;
+  }
+
+  .admin-attendance-card,
+  .admin-reset-card{
+    padding-left:18px !important;
+    padding-right:18px !important;
+  }
+
+  .admin-subsection{
+    padding:16px !important;
+  }
+
+  .native-picker-shell{
+    width:100% !important;
+    max-width:100% !important;
+    height:52px;
+  }
+
+  .native-picker-display{
+    font-size:16px;
+    padding-left:14px;
+    padding-right:40px;
+  }
+
+  .overall-member-metric{
+    min-height:58px !important;
+    padding:5px 3px !important;
+  }
+
+  .metric-stack{
+    gap:5px;
+    transform:translateY(2px);
+  }
+
+  .metric-stack b{
+    font-size:17px !important;
+  }
+
+  .metric-stack small{
+    font-size:10px !important;
+    line-height:1.15 !important;
+  }
+}
+
+@media(max-width:380px){
+  .admin-attendance-card,
+  .admin-reset-card{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  .admin-subsection{
+    padding-left:13px !important;
+    padding-right:13px !important;
+  }
+
+  .metric-stack b{
+    font-size:16px !important;
+  }
+
+  .metric-stack small{
+    font-size:9.5px !important;
+  }
+}

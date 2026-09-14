@@ -591,16 +591,22 @@
 
               <span class="overall-member-stats">
                 <span class="overall-member-metric">
-                  <b>${esc(m.leave_remaining)}일</b>
-                  <small>잔여 휴가</small>
+                  <span class="metric-stack">
+                    <b>${esc(m.leave_remaining)}일</b>
+                    <small>잔여 휴가</small>
+                  </span>
                 </span>
                 <span class="overall-member-metric issue-metric">
-                  <b>${esc(m.infractions)}회</b>
-                  <small>지각·조퇴·외출</small>
+                  <span class="metric-stack">
+                    <b>${esc(m.infractions)}회</b>
+                    <small>지각·조퇴·외출</small>
+                  </span>
                 </span>
                 <span class="overall-member-metric ${m.exit_candidate?"danger-text":""}">
-                  <b>${esc(m.penalty_absences)}회</b>
-                  <small>누적결근</small>
+                  <span class="metric-stack">
+                    <b>${esc(m.penalty_absences)}회</b>
+                    <small>누적결근</small>
+                  </span>
                 </span>
               </span>
 
@@ -886,6 +892,51 @@
   }
 
 
+
+  function formatPickerDisplay(id, value){
+    if(id === "editDate"){
+      if(!value) return "날짜 선택";
+      const [y,m,d] = value.split("-").map(Number);
+      return `${y}. ${m}. ${d}.`;
+    }
+
+    if(id === "resetMonth"){
+      if(!value) return "월 선택";
+      const [y,m] = value.split("-").map(Number);
+      return `${y}년 ${m}월`;
+    }
+
+    if(id === "editIn" || id === "editOut"){
+      return value || "--:--";
+    }
+
+    return value || "";
+  }
+
+  function syncPickerDisplay(id){
+    const input = $(id);
+    const display = $(`${id}Display`);
+    if(!input || !display) return;
+
+    display.textContent = formatPickerDisplay(id, input.value);
+
+    if((id === "editIn" || id === "editOut") && !input.value){
+      display.classList.add("placeholder");
+    }else{
+      display.classList.remove("placeholder");
+    }
+  }
+
+  function syncAllPickerDisplays(){
+    ["editDate","editIn","editOut","resetMonth"].forEach(syncPickerDisplay);
+  }
+
+  ["editDate","editIn","editOut","resetMonth"].forEach(id => {
+    const input = $(id);
+    input?.addEventListener("change", () => syncPickerDisplay(id));
+    input?.addEventListener("input", () => syncPickerDisplay(id));
+  });
+
   function isWeekendDate(dateText){
     if(!dateText) return false;
     const d = parseDateLocal(dateText);
@@ -1047,6 +1098,8 @@
       });
       $("editIn").value = "";
       $("editOut").value = "";
+      syncPickerDisplay("editIn");
+      syncPickerDisplay("editOut");
       await refresh();
       toast("출퇴근 기록을 삭제했습니다.");
     }catch(e){
@@ -1138,6 +1191,7 @@
     const local = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
     $("editDate").value = local;
     if($("resetMonth")) $("resetMonth").value = local.slice(0,7);
+    syncAllPickerDisplays();
     updateWeekendAdminState();
 
     refresh();
