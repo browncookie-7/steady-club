@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Office Attendance</title>
   <link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="./styles.css?v=10.11">
+  <link rel="stylesheet" href="./styles.css?v=10.13">
 </head>
 <body>
   <main class="shell">
@@ -50,7 +50,7 @@
             <div class="meta" id="todayLabel">-</div>
           </div>
           <div class="members" id="todayMembers"></div>
-          <div class="footer-note">근태 변동이나 기록 오류가 생기면 운영진에게 문의해주세요.</div>
+          <div class="footer-note">근태 오류는 운영진에게 문의해주세요.</div>
         </section>
 
         <section class="card rules-card">
@@ -174,7 +174,7 @@
           <div class="admin-edit-grid">
             <div class="field">
               <label for="editDate">날짜</label>
-              <input id="editDate" type="date" class="input">
+              <div class="native-input-wrap"><input id="editDate" type="date" class="input native-input"></div>
             </div>
             <div class="field">
               <label for="editMember">멤버</label>
@@ -208,11 +208,11 @@
             <div class="two">
               <div class="field">
                 <label for="editIn">출근 시간</label>
-                <input id="editIn" type="time" class="input">
+                <div class="native-input-wrap"><input id="editIn" type="time" class="input native-input"></div>
               </div>
               <div class="field">
                 <label for="editOut">퇴근 시간</label>
-                <input id="editOut" type="time" class="input">
+                <div class="native-input-wrap"><input id="editOut" type="time" class="input native-input"></div>
               </div>
             </div>
             <div class="row">
@@ -237,7 +237,7 @@
             <div class="reset-controls">
               <div class="field reset-month-field">
                 <label for="resetMonth">초기화할 월</label>
-                <input id="resetMonth" type="month" min="2026-09" class="input">
+                <div class="native-input-wrap"><input id="resetMonth" type="month" min="2026-09" class="input native-input"></div>
               </div>
               <div class="row reset-buttons">
                 <button id="resetMonthBtn" class="btn secondary">선택 월 초기화</button>
@@ -256,6 +256,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./config.js"></script>
-  <script src="./app.js?v=10.11"></script>
+  <script src="./app.js?v=10.13"></script>
 </body>
 </html>
