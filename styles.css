@@ -1897,3 +1897,168 @@ label{font-size:15px;color:#5f6f82;font-weight:700}
     font-size:9.5px !important;
   }
 }
+
+
+/* =========================================================
+   v10.12 · iOS/ZEP mobile form overflow + metric centering
+   ========================================================= */
+
+/* ---------- 관리자 폼: iOS date/time/month intrinsic width 강제 해제 ---------- */
+.admin-attendance-card,
+.admin-subsection,
+.admin-edit-grid,
+.two,
+.field,
+.reset-layout,
+.reset-controls,
+.member-add-row{
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+.field{
+  width:100% !important;
+}
+
+.input,
+.select,
+.textarea,
+input[type="date"],
+input[type="time"],
+input[type="month"]{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  inline-size:100% !important;
+  max-inline-size:100% !important;
+  min-inline-size:0 !important;
+  -webkit-min-logical-width:0 !important;
+  box-sizing:border-box !important;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="month"]{
+  overflow:hidden;
+}
+
+.admin-attendance-card,
+.admin-subsection{
+  overflow:hidden;
+}
+
+/* ---------- 월간 전체보기 지표: 숫자/라벨 수직축 고정 ---------- */
+.overall-member-stats{
+  align-items:stretch !important;
+}
+
+.overall-member-metric{
+  display:grid !important;
+  grid-template-rows:26px 34px !important;
+  align-content:center !important;
+  justify-items:center !important;
+  align-items:center !important;
+  justify-content:stretch !important;
+  gap:5px !important;
+  min-height:74px;
+  padding:7px 6px !important;
+  text-align:center !important;
+}
+
+.overall-member-metric b{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100%;
+  height:26px;
+  margin:0 !important;
+  line-height:1 !important;
+}
+
+.overall-member-metric small{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100%;
+  min-height:34px !important;
+  height:34px;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:1.3 !important;
+  text-align:center !important;
+  word-break:keep-all;
+}
+
+/* 모바일 관리자 화면은 패딩도 살짝 줄여 실제 가용폭 확보 */
+@media(max-width:640px){
+  .admin-attendance-card{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  .admin-subsection{
+    padding:15px 13px !important;
+  }
+
+  .admin-edit-grid,
+  .two{
+    width:100% !important;
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+
+  .input,
+  .select,
+  .textarea,
+  input[type="date"],
+  input[type="time"],
+  input[type="month"]{
+    font-size:16px !important;
+    padding-left:13px !important;
+    padding-right:13px !important;
+  }
+
+  /* 모바일에서도 지표 내용이 박스 정중앙에 오도록 */
+  .overall-member-metric{
+    grid-template-rows:25px 32px !important;
+    min-height:76px !important;
+    padding:8px 4px !important;
+    gap:5px !important;
+  }
+
+  .overall-member-metric b{
+    height:25px;
+    font-size:17px !important;
+  }
+
+  .overall-member-metric small{
+    height:32px;
+    min-height:32px !important;
+    font-size:10.5px !important;
+    line-height:1.25 !important;
+  }
+}
+
+@media(max-width:380px){
+  .admin-attendance-card{
+    padding-left:11px !important;
+    padding-right:11px !important;
+  }
+
+  .admin-subsection{
+    padding-left:11px !important;
+    padding-right:11px !important;
+  }
+
+  .overall-member-metric{
+    min-height:72px !important;
+  }
+
+  .overall-member-metric b{
+    font-size:16px !important;
+  }
+
+  .overall-member-metric small{
+    font-size:9.5px !important;
+  }
+}
