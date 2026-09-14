@@ -406,6 +406,7 @@
     const box = $("monthlyCalendar");
     const tabs = $("monthMemberTabs");
     const summary = $("monthlySummary");
+    const legend = $("calendarLegend");
     if(!box || !tabs || !summary) return;
 
     const fallbackMonth = state.monthCursor || state.dashboard?.month || new Date().toISOString().slice(0,7);
@@ -570,6 +571,19 @@
 
     renderDayDetail(selected, dayMaps, monthly);
 
+    if(legend){
+      legend.innerHTML = `
+        <div class="simple-legend calendar-simple-legend">
+          <span><i class="legend-circle present"></i>출근</span>
+          <span><i class="legend-circle issue"></i>지각·조퇴·외출</span>
+          <span><i class="legend-circle leave"></i>휴가</span>
+          <span><i class="legend-circle half"></i>반가</span>
+          <span><i class="legend-circle excused"></i>공가·병결</span>
+          <span><i class="legend-circle absent"></i>결근</span>
+        </div>
+      `;
+    }
+
     if(!selected){
       summary.innerHTML = `
         <div class="summary-intro">
@@ -591,19 +605,19 @@
 
               <span class="overall-member-stats">
                 <span class="overall-member-metric">
-                  <span class="metric-stack">
+                  <span class="metric-content">
                     <b>${esc(m.leave_remaining)}일</b>
                     <small>잔여 휴가</small>
                   </span>
                 </span>
                 <span class="overall-member-metric issue-metric">
-                  <span class="metric-stack">
+                  <span class="metric-content">
                     <b>${esc(m.infractions)}회</b>
                     <small>지각·조퇴·외출</small>
                   </span>
                 </span>
                 <span class="overall-member-metric ${m.exit_candidate?"danger-text":""}">
-                  <span class="metric-stack">
+                  <span class="metric-content">
                     <b>${esc(m.penalty_absences)}회</b>
                     <small>누적결근</small>
                   </span>
@@ -615,14 +629,6 @@
           `).join("") || `<div class="empty">등록된 멤버가 없습니다.</div>`}
         </div>
 
-        <div class="simple-legend">
-          <span><i class="legend-circle present"></i>출근</span>
-          <span><i class="legend-circle issue"></i>지각·조퇴·외출</span>
-          <span><i class="legend-circle leave"></i>휴가</span>
-          <span><i class="legend-circle half"></i>반가</span>
-          <span><i class="legend-circle excused"></i>공가·병결</span>
-          <span><i class="legend-circle absent"></i>결근</span>
-        </div>
       `;
 
       summary.querySelectorAll("[data-open-member]").forEach(btn => {
@@ -670,14 +676,6 @@
           </div>
         </div>
 
-        <div class="simple-legend personal-legend">
-          <span><i class="legend-circle present"></i>출근</span>
-          <span><i class="legend-circle issue"></i>지각·조퇴·외출</span>
-          <span><i class="legend-circle leave"></i>휴가</span>
-          <span><i class="legend-circle half"></i>반가</span>
-          <span><i class="legend-circle excused"></i>공가·병결</span>
-          <span><i class="legend-circle absent"></i>결근</span>
-        </div>
       `;
     }
   }
@@ -893,48 +891,42 @@
 
 
 
-  function formatPickerDisplay(id, value){
-    if(id === "editDate"){
-      if(!value) return "날짜 선택";
-      const [y,m,d] = value.split("-").map(Number);
-      return `${y}. ${m}. ${d}.`;
-    }
-
-    if(id === "resetMonth"){
-      if(!value) return "월 선택";
-      const [y,m] = value.split("-").map(Number);
-      return `${y}년 ${m}월`;
-    }
-
-    if(id === "editIn" || id === "editOut"){
-      return value || "--:--";
-    }
-
-    return value || "";
+  function formatPickerDate(value){
+    if(!value) return "날짜 선택";
+    const [y,m,d] = value.split("-").map(Number);
+    return `${y}. ${m}. ${d}.`;
   }
 
-  function syncPickerDisplay(id){
-    const input = $(id);
-    const display = $(`${id}Display`);
-    if(!input || !display) return;
-
-    display.textContent = formatPickerDisplay(id, input.value);
-
-    if((id === "editIn" || id === "editOut") && !input.value){
-      display.classList.add("placeholder");
-    }else{
-      display.classList.remove("placeholder");
-    }
+  function formatPickerMonth(value){
+    if(!value) return "월 선택";
+    const [y,m] = value.split("-").map(Number);
+    return `${y}년 ${m}월`;
   }
 
-  function syncAllPickerDisplays(){
-    ["editDate","editIn","editOut","resetMonth"].forEach(syncPickerDisplay);
+  function syncPickerDisplays(){
+    const date = $("editDate")?.value || "";
+    const inTime = $("editIn")?.value || "";
+    const outTime = $("editOut")?.value || "";
+    const month = $("resetMonth")?.value || "";
+
+    if($("editDateDisplay")) $("editDateDisplay").textContent = formatPickerDate(date);
+
+    if($("editInDisplay")){
+      $("editInDisplay").textContent = inTime || "시간 선택";
+      $("editInDisplay").classList.toggle("picker-placeholder", !inTime);
+    }
+
+    if($("editOutDisplay")){
+      $("editOutDisplay").textContent = outTime || "시간 선택";
+      $("editOutDisplay").classList.toggle("picker-placeholder", !outTime);
+    }
+
+    if($("resetMonthDisplay")) $("resetMonthDisplay").textContent = formatPickerMonth(month);
   }
 
   ["editDate","editIn","editOut","resetMonth"].forEach(id => {
-    const input = $(id);
-    input?.addEventListener("change", () => syncPickerDisplay(id));
-    input?.addEventListener("input", () => syncPickerDisplay(id));
+    $(id)?.addEventListener("change", syncPickerDisplays);
+    $(id)?.addEventListener("input", syncPickerDisplays);
   });
 
   function isWeekendDate(dateText){
@@ -1098,8 +1090,7 @@
       });
       $("editIn").value = "";
       $("editOut").value = "";
-      syncPickerDisplay("editIn");
-      syncPickerDisplay("editOut");
+      syncPickerDisplays();
       await refresh();
       toast("출퇴근 기록을 삭제했습니다.");
     }catch(e){
@@ -1191,7 +1182,7 @@
     const local = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
     $("editDate").value = local;
     if($("resetMonth")) $("resetMonth").value = local.slice(0,7);
-    syncAllPickerDisplays();
+    syncPickerDisplays();
     updateWeekendAdminState();
 
     refresh();

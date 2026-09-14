@@ -2260,73 +2260,141 @@ input[type="month"]{
 
 
 /* =========================================================
-   v10.14 · true native picker containment + exact metric center
+   v10.14 · hard layout rebuild
    ========================================================= */
 
-/*
-  iOS/ZEP date/time/month inputs are removed from normal layout flow.
-  The visible control is our own block. The real native picker sits
-  absolutely over it and can no longer change the card width.
-*/
-.native-picker-shell{
-  position:relative;
-  display:block;
-  width:100%;
-  min-width:0;
-  max-width:100%;
-  height:52px;
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:#fcfdff;
-  box-sizing:border-box;
+/* 1) MONTHLY OVERVIEW 지표: 정중앙을 강제하는 별도 내부 레이어 */
+.overall-member-stats{
+  grid-auto-rows:76px !important;
+  align-items:center !important;
+}
+
+.overall-member-metric{
+  position:relative !important;
+  display:block !important;
+  height:76px !important;
+  min-height:76px !important;
+  max-height:76px !important;
+  padding:0 !important;
+  margin:0 !important;
   overflow:hidden;
 }
 
-.native-picker-shell:focus-within{
-  border-color:#aab4c1;
-  box-shadow:0 0 0 4px rgba(81,96,116,.10);
+.overall-member-metric .metric-content{
+  position:absolute;
+  left:4px;
+  right:4px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  text-align:center;
 }
 
-.native-picker-display{
-  position:absolute;
-  inset:0;
+.overall-member-metric .metric-content b{
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-size:18px !important;
+  line-height:1 !important;
+}
+
+.overall-member-metric .metric-content small{
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-size:11.5px !important;
+  line-height:1.2 !important;
+  white-space:normal !important;
+  word-break:keep-all;
+  text-align:center !important;
+}
+
+/* 2) 범례는 캘린더 소속 */
+.calendar-legend-host{
+  border-top:1px solid #e5e8ec;
+  margin-top:4px;
+  padding:13px 4px 2px;
+}
+
+.calendar-simple-legend{
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  justify-content:flex-start;
+}
+
+/* 오른쪽 monthly summary 아래에는 범례를 두지 않는다 */
+.monthly-summary > .simple-legend{
+  display:none !important;
+}
+
+/* 3) 관리자 native picker를 '보이지 않게' 하고 우리 UI만 표시 */
+.picker-shell{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:54px;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fcfdff;
+  overflow:hidden;
+}
+
+.picker-display{
+  position:relative;
   z-index:1;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:0 42px 0 14px;
+  width:100%;
+  height:100%;
+  padding:0 44px 0 14px;
+  box-sizing:border-box;
   color:var(--ink);
   font-size:16px;
   line-height:1;
+  text-align:center;
   white-space:nowrap;
   pointer-events:none;
-  box-sizing:border-box;
 }
 
-.native-picker-display.placeholder{
-  color:#a5adb7;
+.picker-placeholder{
+  color:#a0a7b0;
 }
 
-/* Small visual cue, independent of the actual native input */
-.native-picker-shell::after{
-  content:"";
+.picker-shell::after{
+  content:"⌄";
   position:absolute;
+  z-index:1;
   right:15px;
   top:50%;
-  z-index:1;
-  width:7px;
-  height:7px;
-  border-right:2px solid #687585;
-  border-bottom:2px solid #687585;
-  transform:translateY(-65%) rotate(45deg);
+  transform:translateY(-52%);
+  color:#7c8795;
+  font-size:17px;
+  line-height:1;
   pointer-events:none;
-  opacity:.8;
 }
 
-.native-picker-input{
+/* 실제 iOS input은 터치만 담당. 시각 요소는 완전히 숨김 */
+.picker-native{
   position:absolute !important;
   inset:0 !important;
-  z-index:2;
+  z-index:2 !important;
   display:block !important;
   width:100% !important;
   height:100% !important;
@@ -2337,163 +2405,118 @@ input[type="month"]{
   border:0 !important;
   opacity:0 !important;
   cursor:pointer;
-  -webkit-appearance:auto;
-  appearance:auto;
+  box-sizing:border-box !important;
+  -webkit-appearance:none;
+  appearance:none;
 }
 
-/* No clipping hacks on the admin cards themselves */
+/* 이전 native input wrapper 규칙은 더 이상 사용하지 않음 */
+.native-input-wrap{
+  display:none !important;
+}
+
+/* 관리자 내부 레이아웃: 어떤 자식도 부모 너비를 넘지 않도록 구조 기준 통일 */
 .admin-attendance-card,
 .admin-subsection,
-.admin-reset-card{
-  overflow:visible !important;
-}
-
-/* Ensure every layout ancestor can actually shrink */
 .admin-edit-grid,
-.admin-edit-grid > *,
 .two,
-.two > *,
-.reset-layout,
-.reset-layout > *,
-.reset-controls,
-.reset-controls > *,
 .field,
+.reset-layout,
+.reset-controls,
 .reset-month-field{
   min-width:0 !important;
   max-width:100% !important;
+  box-sizing:border-box !important;
 }
 
-/* Attendance note: keep it comfortably on one line */
+.admin-attendance-card,
+.admin-subsection{
+  overflow:visible !important;
+}
+
+/* 4) 오늘 근태 안내 */
 .attendance-card .footer-note{
   white-space:nowrap !important;
-  overflow:visible !important;
-  text-overflow:clip !important;
-  font-size:13px !important;
-  padding:10px 13px !important;
-  line-height:1.35 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
 }
 
-/* Metric cards: compact, and the content stack is geometrically centered */
-.overall-member-metric{
-  position:relative;
-  display:grid !important;
-  place-items:center !important;
-  min-height:54px !important;
-  padding:5px 5px !important;
-  text-align:center !important;
-}
-
-.metric-stack{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  width:100%;
-  margin:0;
-  padding:0;
-  transform:translateY(2px);
-}
-
-.metric-stack b{
-  display:block !important;
-  width:auto !important;
-  height:auto !important;
-  margin:0 !important;
-  padding:0 !important;
-  font-size:18px !important;
-  line-height:1 !important;
-  text-align:center !important;
-}
-
-.metric-stack small{
-  display:block !important;
-  width:100% !important;
-  height:auto !important;
-  min-height:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-  color:#838d9a !important;
-  font-size:11px !important;
-  line-height:1.15 !important;
-  text-align:center !important;
-  word-break:keep-all;
-}
-
-/* Neutralize previous direct child centering rules */
-.overall-member-metric > b,
-.overall-member-metric > small{
-  margin:0 !important;
-}
-
+/* ---------------- mobile ---------------- */
 @media(max-width:640px){
+  .overall-member-stats{
+    grid-auto-rows:72px !important;
+  }
+
+  .overall-member-metric{
+    height:72px !important;
+    min-height:72px !important;
+    max-height:72px !important;
+  }
+
+  .overall-member-metric .metric-content{
+    gap:6px;
+  }
+
+  .overall-member-metric .metric-content b{
+    font-size:17px !important;
+  }
+
+  .overall-member-metric .metric-content small{
+    font-size:10.5px !important;
+  }
+
+  .calendar-legend-host{
+    padding-top:12px;
+  }
+
+  .calendar-simple-legend{
+    gap:8px 11px !important;
+    font-size:10.5px !important;
+  }
+
+  /* 관리자 한 열 구조. picker-shell 자체가 카드 내부 너비를 가짐 */
   .admin-edit-grid,
   .two,
   .reset-layout,
   .reset-controls{
+    display:grid !important;
     grid-template-columns:minmax(0,1fr) !important;
+    width:auto !important;
+  }
+
+  .field,
+  .reset-month-field,
+  .picker-shell{
     width:100% !important;
-  }
-
-  .admin-attendance-card,
-  .admin-reset-card{
-    padding-left:18px !important;
-    padding-right:18px !important;
-  }
-
-  .admin-subsection{
-    padding:16px !important;
-  }
-
-  .native-picker-shell{
-    width:100% !important;
+    min-width:0 !important;
     max-width:100% !important;
-    height:52px;
   }
 
-  .native-picker-display{
+  .picker-shell{
+    height:54px;
+  }
+
+  .picker-display{
     font-size:16px;
-    padding-left:14px;
-    padding-right:40px;
-  }
-
-  .overall-member-metric{
-    min-height:58px !important;
-    padding:5px 3px !important;
-  }
-
-  .metric-stack{
-    gap:5px;
-    transform:translateY(2px);
-  }
-
-  .metric-stack b{
-    font-size:17px !important;
-  }
-
-  .metric-stack small{
-    font-size:10px !important;
-    line-height:1.15 !important;
   }
 }
 
 @media(max-width:380px){
-  .admin-attendance-card,
-  .admin-reset-card{
-    padding-left:14px !important;
-    padding-right:14px !important;
+  .overall-member-stats{
+    grid-auto-rows:68px !important;
   }
 
-  .admin-subsection{
-    padding-left:13px !important;
-    padding-right:13px !important;
+  .overall-member-metric{
+    height:68px !important;
+    min-height:68px !important;
+    max-height:68px !important;
   }
 
-  .metric-stack b{
+  .overall-member-metric .metric-content b{
     font-size:16px !important;
   }
 
-  .metric-stack small{
+  .overall-member-metric .metric-content small{
     font-size:9.5px !important;
   }
 }

@@ -50,7 +50,7 @@
             <div class="meta" id="todayLabel">-</div>
           </div>
           <div class="members" id="todayMembers"></div>
-          <div class="footer-note">근태 변동·기록 오류는 운영진에게 문의해주세요.</div>
+          <div class="footer-note">근태 변동이나 기록 오류는 운영진에게 문의해주세요.</div>
         </section>
 
         <section class="card rules-card">
@@ -107,6 +107,7 @@
             </div>
             <div id="monthlyCalendar" class="monthly-calendar"></div>
             <div id="calendarDayDetail" class="calendar-day-detail"></div>
+            <div id="calendarLegend" class="calendar-legend-host"></div>
           </div>
 
           <aside id="monthlySummary" class="monthly-summary"></aside>
@@ -174,10 +175,7 @@
           <div class="admin-edit-grid">
             <div class="field">
               <label for="editDate">날짜</label>
-              <div class="native-picker-shell">
-         <div id="editDateDisplay" class="native-picker-display">날짜 선택</div>
-         <input id="editDate" type="date" class="native-picker-input" aria-label="날짜 선택">
-       </div>
+              <div class="picker-shell"><span id="editDateDisplay" class="picker-display">날짜 선택</span><input id="editDate" type="date" class="picker-native" aria-label="날짜"></div>
             </div>
             <div class="field">
               <label for="editMember">멤버</label>
@@ -211,17 +209,11 @@
             <div class="two">
               <div class="field">
                 <label for="editIn">출근 시간</label>
-                <div class="native-picker-shell">
-         <div id="editInDisplay" class="native-picker-display placeholder">--:--</div>
-         <input id="editIn" type="time" class="native-picker-input" aria-label="출근 시간 선택">
-       </div>
+                <div class="picker-shell"><span id="editInDisplay" class="picker-display picker-placeholder">시간 선택</span><input id="editIn" type="time" class="picker-native" aria-label="출근 시간"></div>
               </div>
               <div class="field">
                 <label for="editOut">퇴근 시간</label>
-                <div class="native-picker-shell">
-         <div id="editOutDisplay" class="native-picker-display placeholder">--:--</div>
-         <input id="editOut" type="time" class="native-picker-input" aria-label="퇴근 시간 선택">
-       </div>
+                <div class="picker-shell"><span id="editOutDisplay" class="picker-display picker-placeholder">시간 선택</span><input id="editOut" type="time" class="picker-native" aria-label="퇴근 시간"></div>
               </div>
             </div>
             <div class="row">
@@ -246,10 +238,7 @@
             <div class="reset-controls">
               <div class="field reset-month-field">
                 <label for="resetMonth">초기화할 월</label>
-                <div class="native-picker-shell">
-         <div id="resetMonthDisplay" class="native-picker-display">월 선택</div>
-         <input id="resetMonth" type="month" min="2026-09" class="native-picker-input" aria-label="초기화할 월 선택">
-       </div>
+                <div class="picker-shell"><span id="resetMonthDisplay" class="picker-display">월 선택</span><input id="resetMonth" type="month" min="2026-09" class="picker-native" aria-label="초기화할 월"></div>
               </div>
               <div class="row reset-buttons">
                 <button id="resetMonthBtn" class="btn secondary">선택 월 초기화</button>
