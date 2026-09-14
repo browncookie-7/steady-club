@@ -581,20 +581,29 @@
         <div class="overall-member-list">
           ${members.map((m,i)=>`
             <button class="overall-member-card" data-open-member="${esc(m.id)}">
-              <span class="summary-avatar large" style="${colorStyle(i)}">${esc(m.name.slice(0,1))}</span>
-              <span class="overall-member-main">
-                <strong>${esc(m.name)}</strong>
-                <small>${monthNo}월 ${esc(m.attended_days)}일 출근</small>
+              <span class="overall-member-identity">
+                <span class="summary-avatar large" style="${colorStyle(i)}">${esc(m.name.slice(0,1))}</span>
+                <span class="overall-member-main">
+                  <strong>${esc(m.name)}</strong>
+                  <small>${monthNo}월 ${esc(m.attended_days)}일 출근</small>
+                </span>
               </span>
-              <span class="overall-member-metric">
-                <b>${esc(m.leave_remaining)}일</b><small>잔여 휴가</small>
+
+              <span class="overall-member-stats">
+                <span class="overall-member-metric">
+                  <b>${esc(m.leave_remaining)}일</b>
+                  <small>잔여 휴가</small>
+                </span>
+                <span class="overall-member-metric issue-metric">
+                  <b>${esc(m.infractions)}회</b>
+                  <small>지각·조퇴·외출</small>
+                </span>
+                <span class="overall-member-metric ${m.exit_candidate?"danger-text":""}">
+                  <b>${esc(m.penalty_absences)}회</b>
+                  <small>누적결근</small>
+                </span>
               </span>
-              <span class="overall-member-metric issue-metric">
-                <b>${esc(m.infractions)}회</b><small>지각·조퇴·외출</small>
-              </span>
-              <span class="overall-member-metric ${m.exit_candidate?"danger-text":""}">
-                <b>${esc(m.penalty_absences)}회</b><small>누적결근</small>
-              </span>
+
               <span class="row-arrow">›</span>
             </button>
           `).join("") || `<div class="empty">등록된 멤버가 없습니다.</div>`}

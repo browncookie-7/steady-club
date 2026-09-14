@@ -1645,3 +1645,255 @@ label{font-size:15px;color:#5f6f82;font-weight:700}
   background:linear-gradient(90deg,#8fa5bd 0 50%,#ffffff 50% 100%);
   border:1px solid #8fa5bd;
 }
+
+
+/* =========================================================
+   v10.11 · monthly overview summary responsive rebuild
+   ========================================================= */
+
+/* 기존 고정 칼럼 값을 덮어쓰고, 멤버/통계 영역을 명확히 분리 */
+.overall-member-card{
+  position:relative;
+  display:grid !important;
+  grid-template-columns:minmax(150px,1fr) minmax(300px,1.28fr) 18px !important;
+  align-items:center;
+  gap:18px !important;
+  padding:15px 16px !important;
+  min-width:0;
+}
+
+.overall-member-identity{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.overall-member-main{
+  min-width:0;
+}
+
+.overall-member-main strong{
+  font-size:17px !important;
+  line-height:1.25;
+}
+
+.overall-member-main small{
+  margin-top:3px;
+  font-size:12.5px !important;
+  line-height:1.35;
+}
+
+.overall-member-stats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+  gap:8px;
+  min-width:0;
+}
+
+.overall-member-metric{
+  min-width:0 !important;
+  align-items:center !important;
+  justify-content:center;
+  text-align:center;
+  padding:7px 6px;
+  border-radius:11px;
+  background:#f8f9fb;
+}
+
+.overall-member-metric b{
+  font-size:18px !important;
+  line-height:1.15;
+  font-weight:760;
+}
+
+.overall-member-metric small{
+  display:block;
+  width:100%;
+  margin-top:5px !important;
+  color:#838d9a !important;
+  font-size:12px !important;
+  line-height:1.3 !important;
+  font-weight:560;
+  text-align:center !important;
+  white-space:normal !important;
+  word-break:keep-all;
+  overflow-wrap:normal;
+}
+
+.issue-metric{
+  min-width:0 !important;
+}
+
+.row-arrow{
+  justify-self:end;
+}
+
+/* 태블릿 이하에서는 좌우 2단 자체를 버려서 찌그러짐 방지 */
+@media(max-width:920px){
+  .monthly-layout{
+    grid-template-columns:1fr !important;
+    gap:16px !important;
+  }
+
+  .calendar-pane{
+    width:100% !important;
+    max-width:560px !important;
+    margin:0 auto !important;
+  }
+
+  .monthly-summary{
+    width:100%;
+    min-width:0;
+  }
+
+  .overall-member-card{
+    grid-template-columns:minmax(140px,.8fr) minmax(300px,1.2fr) 18px !important;
+    gap:14px !important;
+  }
+}
+
+/* 휴대폰: 프로필 위 / 지표 3칸 아래 */
+@media(max-width:640px){
+  .monthly-attendance-card{
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  .monthly-head{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:start !important;
+    column-gap:8px !important;
+  }
+
+  .month-subtitle{
+    max-width:230px;
+  }
+
+  .monthly-summary{
+    padding:17px 14px !important;
+  }
+
+  .summary-intro{
+    margin-bottom:16px !important;
+  }
+
+  .summary-intro h3{
+    font-size:21px !important;
+    line-height:1.35 !important;
+    word-break:keep-all;
+  }
+
+  .summary-intro p{
+    font-size:13.5px !important;
+    line-height:1.6 !important;
+    word-break:keep-all;
+  }
+
+  .overall-member-list{
+    gap:10px;
+  }
+
+  .overall-member-card{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+    padding:14px !important;
+    border-radius:17px !important;
+  }
+
+  .overall-member-identity{
+    padding-right:24px;
+  }
+
+  .summary-avatar.large{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    font-size:14px;
+    flex:0 0 auto;
+  }
+
+  .overall-member-main strong{
+    font-size:16px !important;
+  }
+
+  .overall-member-main small{
+    font-size:12px !important;
+  }
+
+  .overall-member-stats{
+    width:100%;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .overall-member-metric{
+    min-height:66px;
+    padding:9px 5px;
+    border:1px solid #e8ebef;
+    background:#f8f9fb;
+  }
+
+  .overall-member-metric b{
+    font-size:17px !important;
+  }
+
+  .overall-member-metric small{
+    min-height:30px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    margin-top:5px !important;
+    font-size:10.5px !important;
+    line-height:1.35 !important;
+  }
+
+  .row-arrow{
+    display:block !important;
+    position:absolute;
+    top:20px;
+    right:14px;
+    font-size:20px;
+  }
+
+  .simple-legend{
+    gap:8px 12px !important;
+    font-size:11px !important;
+    line-height:1.4;
+  }
+}
+
+/* 아주 작은 폰에서도 세 칸 폭을 보장하되 텍스트는 자연스럽게 줄바꿈 */
+@media(max-width:380px){
+  .monthly-attendance-card{
+    padding-left:11px !important;
+    padding-right:11px !important;
+  }
+
+  .monthly-summary{
+    padding:15px 11px !important;
+  }
+
+  .overall-member-card{
+    padding:12px !important;
+  }
+
+  .overall-member-stats{
+    gap:4px;
+  }
+
+  .overall-member-metric{
+    padding:8px 3px;
+  }
+
+  .overall-member-metric b{
+    font-size:16px !important;
+  }
+
+  .overall-member-metric small{
+    font-size:9.5px !important;
+  }
+}
